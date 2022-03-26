@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "7227e84e-842f-4695-9490-7dd7f8af0f07",
+		"name": "mtaa",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Reviews",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "placeUid",
+						"value": "1",
+						"type": "default",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/places/reviews/:placeUID",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"places",
+						"reviews",
+						":placeUID"
+					],
+					"variable": [
+						{
+							"key": "placeUID",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Places of a PlaceType",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/places/type/:placetype",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"places",
+						"type",
+						":placetype"
+					],
+					"variable": [
+						{
+							"key": "placetype",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get place via PlaceUID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/places/data/:placeid",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"places",
+						"data",
+						":placeid"
+					],
+					"variable": [
+						{
+							"key": "placeid",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new place",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"NejakaRestika\",\r\n    \"shortDescription\": \"restika nejaka\",\r\n    \"longDescription\": \"fajnova restika ktora je neveiem kde\",\r\n    \"photo\": \" \",\r\n    \"location\": \"hd\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/places/create/:placetype/:userid",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"places",
+						"create",
+						":placetype",
+						":userid"
+					],
+					"variable": [
+						{
+							"key": "placetype",
+							"value": "1"
+						},
+						{
+							"key": "userid",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
