@@ -84,6 +84,32 @@ app.get('/places/reviews/:placeid', function (req, res) {
         });
 });
 
+//post na vlozenie noveho miesta
+app.post('/places/create/:placetype/:userid', function (req, res) {
+    connectDB();
+    console.log('POST received');
+    req.on('data', function(data){
+        let input = JSON.parse(data);
+        res.setHeader('Content-Type', 'application/json');
+        connection.query("INSERT INTO Places (name, shortDescription, longDescription, photo, placeType, location) VALUES \
+        ('"+input.name+"','"+input.shortDescription+"','"+input.longDescription+"','"+input.photo+"','"+req.params.placetype+"','"+input.location+"');", 
+        function (error, results) {
+            if (error) {
+                res.statusCode = 500;
+                console.log(error)
+                res.end(JSON.stringify({
+                    'status': 'error',
+                    'json': input
+                }));
+            }
+            else{
+                res.statusCode = 200;
+                res.end(JSON.stringify({'status': 'ok'}));
+            }
+        });
+    });
+});
+
 app.listen(port, function () {
     console.log('Example app listening on port 3000.');
 });
