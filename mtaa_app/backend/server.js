@@ -85,7 +85,7 @@ app.get('/places/reviews/:placeid', function (req, res) {
 });
 
 //post na vlozenie noveho miesta
-app.post('/places/create/:placetype/:userid', function (req, res) {
+app.post('/places/create/:placeid/:userid', function (req, res) {
     connectDB();
     console.log('POST received');
     req.on('data', function(data){
@@ -94,6 +94,80 @@ app.post('/places/create/:placetype/:userid', function (req, res) {
         connection.query("INSERT INTO Places (name, shortDescription, longDescription, photo, placeType, location) VALUES \
         ('"+input.name+"','"+input.shortDescription+"','"+input.longDescription+"','"+input.photo+"','"+req.params.placetype+"','"+input.location+"');", 
         function (error, results) {
+            if (error) {
+                res.statusCode = 500;
+                console.log(error)
+                res.end(JSON.stringify({
+                    'status': 'error',
+                    'json': input
+                }));
+            }
+            else{
+                res.statusCode = 200;
+                res.end(JSON.stringify({'status': 'ok'}));
+            }
+        });
+    });
+});
+
+//post na vlozenie recenzií
+app.post('/places/reviews/create/:placeid/:userid', function (req, res) {
+    connectDB();
+    console.log('POST received');
+    req.on('data', function(data){
+        let input = JSON.parse(data);
+        res.setHeader('Content-Type', 'application/json');
+        connection.query("INSERT INTO Reviews (placeUID, userUsername, reviewText, revPhoto, rating, userUID) VALUES \
+        ('"+req.params.placeid+"','"+input.userUsername+"','"+input.reviewText+"','"+input.revPhoto+"','"+input.rating+"' ,'"+req.params.userid+"');", 
+        function (error, results) {
+            if (error) {
+                res.statusCode = 500;
+                console.log(error)
+                res.end(JSON.stringify({
+                    'status': 'error',
+                    'json': input
+                }));
+            }
+            else{
+                res.statusCode = 200;
+                res.end(JSON.stringify({'status': 'ok'}));
+            }
+        });
+    });
+});
+
+//delete na vlozenie recenzií
+app.delete('/places/reviews/delete/:reviewid/:userid', function (req, res) {
+    connectDB();
+    console.log('DELETE received');
+    req.on('data', function(data){
+        let input = JSON.parse(data);
+        res.setHeader('Content-Type', 'application/json');
+        connection.query('DELETE FROM Reviews WHERE reviewID = ' +req.params.reviewid, function (error, results) {
+            if (error) {
+                res.statusCode = 500;
+                console.log(error)
+                res.end(JSON.stringify({
+                    'status': 'error',
+                    'json': input
+                }));
+            }
+            else{
+                res.statusCode = 200;
+                res.end(JSON.stringify({'status': 'ok'}));
+            }
+        });
+    });
+});
+
+app.delete('/places/delete/:placeid/:userid', function (req, res) {
+    connectDB();
+    console.log('DELETE received');
+    req.on('data', function(data){
+        let input = JSON.parse(data);
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        connection.query('DELETE FROM Places WHERE uniqueID = ' +req.params.placeid, function (error, results) {
             if (error) {
                 res.statusCode = 500;
                 console.log(error)
