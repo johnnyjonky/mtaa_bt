@@ -110,6 +110,39 @@ app.post('/places/create/:placetype/:userid', function (req, res) {
     });
 });
 
+//put na upravu miesta
+app.put('/places/edit/:placeid/:userid', function (req, res) {
+    connectDB();
+    console.log('POST received');
+    req.on('data', function(data){
+        let input = JSON.parse(data);
+        res.setHeader('Content-Type', 'application/json');
+        connection.query("UPDATE Places SET \
+        uniqueID = '"+req.params.placeid+"', \
+        name = '"+input.name+"', \
+        shortDescription = '"+input.shortDescription+"', \
+        longDescription = '"+input.longDescription+"', \
+        photo = '"+input.photo+"', \
+        placeType = '"+input.placeType+"', \
+        location = '"+input.location+"' \
+        WHERE uniqueID = "+req.params.placeid+""
+        , function (error, results) {
+            if (error) {
+                res.statusCode = 500;
+                console.log(error)
+                res.end(JSON.stringify({
+                    'status': 'error',
+                    'json': input
+                }));
+            }
+            else{
+                res.statusCode = 200;
+                res.end(JSON.stringify({'status': 'ok'}));
+            }
+        });
+    });
+});
+
 app.listen(port, function () {
     console.log('Example app listening on port 3000.');
 });
