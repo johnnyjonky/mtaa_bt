@@ -85,7 +85,7 @@ app.get('/places/reviews/:placeid', function (req, res) {
 });
 
 //post na vlozenie noveho miesta
-app.post('/places/create/:placeid/:userid', function (req, res) {
+app.post('/places/create/:placetype/:userid', function (req, res) {
     connectDB();
     console.log('POST received');
     req.on('data', function(data){
