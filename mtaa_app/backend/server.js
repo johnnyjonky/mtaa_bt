@@ -113,6 +113,29 @@ app.post('/places/create/:placetype/:userid', function (req, res) {
 
 //post na vlozenie recenzií
 app.post('/places/reviews/create/:placeid/:userid', function (req, res) {
+    connectDB();
+    console.log('POST received');
+    req.on('data', function(data){
+        let input = JSON.parse(data);
+        res.setHeader('Content-Type', 'application/json');
+        connection.query("INSERT INTO Reviews (placeUID, userUsername, reviewText, revPhoto, rating, userUID) VALUES \
+        ('"+req.params.placeid+"','"+input.userUsername+"','"+input.reviewText+"','"+input.revPhoto+"','"+input.rating+"' ,'"+req.params.userid+"');", 
+        function (error, results) {
+            if (error) {
+                res.statusCode = 500;
+                console.log(error)
+                res.end(JSON.stringify({
+                    'status': 'error',
+                    'json': input
+                }));
+            }
+            else{
+                res.statusCode = 200;
+                res.end(JSON.stringify({'status': 'ok'}));
+            }
+        });
+    });
+});
 
 //put na upravu miesta
 app.put('/places/edit/:placeid/:userid', function (req, res) {
