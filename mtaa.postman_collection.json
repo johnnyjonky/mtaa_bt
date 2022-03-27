@@ -124,6 +124,41 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Edit place via PlaceID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"NejakaRestikaSoZmenenymNazvom\",\r\n    \"shortDescription\": \"restika nejaka\",\r\n    \"longDescription\": \"fajnova restika ktora je neveiem kde\",\r\n    \"placeType\": 1\r\n    \"photo\": \" \",\r\n    \"location\": \"hd\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/places/edit/:placeid/:userid",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"places",
+						"edit",
+						":placeid",
+						":userid"
+					],
+					"variable": [
+						{
+							"key": "placeid",
+							"value": "5"
+						},
+						{
+							"key": "userid",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

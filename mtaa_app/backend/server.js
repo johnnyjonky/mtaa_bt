@@ -110,13 +110,19 @@ app.post('/places/create/:placetype/:userid', function (req, res) {
     });
 });
 
+
 //post na vlozenie recenzií
 app.post('/places/reviews/create/:placeid/:userid', function (req, res) {
+
+//put na upravu miesta
+app.put('/places/edit/:placeid/:userid', function (req, res) {
+
     connectDB();
     console.log('POST received');
     req.on('data', function(data){
         let input = JSON.parse(data);
         res.setHeader('Content-Type', 'application/json');
+
         connection.query("INSERT INTO Reviews (placeUID, userUsername, reviewText, revPhoto, rating, userUID) VALUES \
         ('"+req.params.placeid+"','"+input.userUsername+"','"+input.reviewText+"','"+input.revPhoto+"','"+input.rating+"' ,'"+req.params.userid+"');", 
         function (error, results) {
@@ -168,6 +174,18 @@ app.delete('/places/delete/:placeid/:userid', function (req, res) {
         res.setHeader('Content-Type', 'application/json');
         res.setHeader("Access-Control-Allow-Origin", "*");
         connection.query('DELETE FROM Places WHERE uniqueID = ' +req.params.placeid, function (error, results) {
+
+        connection.query("UPDATE Places SET \
+        uniqueID = '"+req.params.placeid+"', \
+        name = '"+input.name+"', \
+        shortDescription = '"+input.shortDescription+"', \
+        longDescription = '"+input.longDescription+"', \
+        photo = '"+input.photo+"', \
+        placeType = '"+input.placeType+"', \
+        location = '"+input.location+"' \
+        WHERE uniqueID = "+req.params.placeid+""
+        , function (error, results) {
+
             if (error) {
                 res.statusCode = 500;
                 console.log(error)
