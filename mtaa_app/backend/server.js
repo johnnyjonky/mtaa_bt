@@ -269,6 +269,61 @@ app.delete('/places/delete/:placeid/:userid', function (req, res) {
     });
 });
 
+//post na registraciu pouzivatela
+app.post('/users/register', function (req, res) {
+    connectDB();
+    console.log('POST received');
+    req.on('data', function(data){
+        let input = JSON.parse(data);
+        res.setHeader('Content-Type', 'application/json');
+        connection.query("INSERT INTO Users (username, pwHash, isAdmin) VALUES \
+        ('"+input.username+"','"+crypto.createHash('md5').update(input.pw).digest('hex')+"','0');", 
+        function (error, results) {
+            if (error) {
+                res.statusCode = 500;
+                console.log(error)
+                res.end(JSON.stringify({
+                    'status': 'error'
+                }));
+            }
+            else{
+                res.statusCode = 200;
+                res.end(JSON.stringify({'status': 'ok'}));
+            }
+        });
+    });
+});
+
+//get na prihlasenie pouzivatela
+app.get('/users/login', function (req, res) {
+    connectDB();
+    console.log('GET received');
+    req.on('data', function(data){
+        let input = JSON.parse(data);
+        res.setHeader('Content-Type', 'application/json');
+        connection.query("SELECT username,pwHash,isAdmin,userUID FROM Users WHERE \
+        username = '"+input.username+"'", 
+        function (error, results) {
+            if (error) {
+                res.statusCode = 500;
+                console.log(error)
+                res.end(JSON.stringify({
+                    'status': 'error'
+                }));
+            }
+            else{
+                if(crypto.createHash('md5').update(input.pw).digest('hex') == results[0].pwHash){
+                    res.statusCode = 200;
+                    res.end(JSON.stringify({'status': 'logged', 'admin': results[0].isAdmin, 'UID': results[0].userUID}));
+                }
+                else{
+                    res.statusCode = 200;
+                    res.end(JSON.stringify({'status': 'badPW'}));
+                }
+            }
+        });
+    });
+});
 
 
 
