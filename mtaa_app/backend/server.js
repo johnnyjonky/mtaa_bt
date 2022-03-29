@@ -143,6 +143,10 @@ app.post('/places/reviews/create/:placeid/:userid', function (req, res) {
             });
         });
     }
+    else{
+        res.statusCode = 401;
+        res.end(JSON.stringify({'status': 'unauthorized'}));
+    }
 });
 
 //put na upravu miesta
@@ -312,13 +316,18 @@ app.get('/users/login', function (req, res) {
                 }));
             }
             else{
-                if(crypto.createHash('md5').update(input.pw).digest('hex') == results[0].pwHash){
-                    res.statusCode = 200;
-                    res.end(JSON.stringify({'status': 'logged', 'admin': results[0].isAdmin, 'UID': results[0].userUID}));
-                }
-                else{
-                    res.statusCode = 200;
-                    res.end(JSON.stringify({'status': 'badPW'}));
+                try{
+                    if(crypto.createHash('md5').update(input.pw).digest('hex') == results[0].pwHash){
+                        res.statusCode = 200;
+                        res.end(JSON.stringify({'status': 'logged', 'admin': results[0].isAdmin, 'UID': results[0].userUID}));
+                    }
+                    else{
+                        res.statusCode = 401;
+                        res.end(JSON.stringify({'status': 'badPW'}));
+                    }
+                } catch (error){
+                    res.statusCode = 401;
+                    res.end(JSON.stringify({'status': 'badname'}));
                 }
             }
         });
@@ -427,7 +436,7 @@ app.get('/placetypes', function (req, res) {
             }
             console.log(results);
             res.end(JSON.stringify({
-                place: results[0]
+                placetypes: results[0]
             }));
         });
 });
