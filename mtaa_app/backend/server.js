@@ -325,6 +325,112 @@ app.get('/users/login', function (req, res) {
     });
 });
 
+//get na shoutbox
+app.get('/shoutbox/data', function (req, res) {
+    console.log('/shoutbox/data');
+        connectDB();
+        res.statusCode = 200; // HTTP OK
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        connection.query('SELECT user,text,timestamp,textID FROM Shoutbox', function (error, results, fields) {
+            if (error) {
+                res.statusCode = 500;
+                res.end('DB ERROR');
+            }
+            console.log(results);
+            res.end(JSON.stringify({
+                shoutbox: results
+            }));
+        });
+});
+
+//post na shoutbox
+app.post('/shoutbox/data/:userid', function (req, res) {
+    connectDB();
+    console.log('POST received');
+    if(parseInt(req.params.userid)>0){
+        req.on('data', function(data){
+            let input = JSON.parse(data);
+            res.setHeader('Content-Type', 'application/json');
+            connection.query("INSERT INTO Shoutbox (user, userID, text, timestamp) VALUES \
+            ('"+input.userUsername+"','"+req.params.userid+"','"+input.text+"','"+new Date().toISOString().slice(0, 19).replace('T', ' ')+"');", 
+            function (error, results) {
+                if (error) {
+                    res.statusCode = 500;
+                    console.log(error)
+                    res.end(JSON.stringify({
+                        'status': 'error',
+                        'json': input
+                    }));
+                }
+                else{
+                    res.statusCode = 200;
+                    res.end(JSON.stringify({'status': 'ok'}));
+                }
+            });
+        });
+    }
+    else{
+        res.statusCode = 401;
+        res.end(JSON.stringify({'status': 'unauthorized'}));
+    }
+});
+
+//delete zo shoutboxu
+app.delete('/shoutbox/delete/:userid/:textid', function (req, res) {
+    connectDB();
+    console.log('DELETE received');
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    connection.query("SELECT isAdmin from Users WHERE userUID = "+req.params.userid
+    , function (error, results) {
+        if (error) {
+            res.statusCode = 500;
+            console.log(error)
+            res.end(JSON.stringify({
+                'status': 'error'
+            }));
+        }
+        if(results[0].isAdmin){
+            connection.query('DELETE FROM Shoutbox WHERE textID = ' +req.params.textid, function (error, results) {
+                if (error) {
+                    res.statusCode = 500;
+                    console.log(error)
+                    res.end(JSON.stringify({
+                        'status': 'error'
+                    }));
+                }
+                else{
+                    res.statusCode = 200;
+                    res.end(JSON.stringify({'status': 'ok'}));
+                }
+            });
+        }
+        else{
+            res.statusCode = 401;
+            res.end(JSON.stringify({'status': 'unauthorized'}));
+        }
+    });
+});
+
+//get na placetypes
+app.get('/placetypes', function (req, res) {
+    console.log('/placetypes');
+        connectDB();
+        res.statusCode = 200; // HTTP OK
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        connection.query('SELECT * FROM Placetypes', function (error, results, fields) {
+            if (error) {
+                res.statusCode = 500;
+                res.end('DB ERROR');
+            }
+            console.log(results);
+            res.end(JSON.stringify({
+                place: results[0]
+            }));
+        });
+});
 
 app.listen(port, function () {
     console.log('Example app listening on port 3000.');
