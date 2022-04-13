@@ -436,7 +436,7 @@ app.get('/placetypes', function (req, res) {
             }
             console.log(results);
             res.end(JSON.stringify({
-                placetypes: results[0]
+                placetypes: results
             }));
         });
 });
