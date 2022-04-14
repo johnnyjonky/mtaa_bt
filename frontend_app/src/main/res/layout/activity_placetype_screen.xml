@@ -4,27 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home_screen">
+    tools:context=".Places_screen">
 
-
-    <LinearLayout
-        android:id="@+id/linear"
-        android:layout_width="369dp"
-        android:layout_height="406dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:divider="@drawable/empty_tall_divider"
-        android:orientation="vertical"
-        android:showDividers="middle"
+    <ScrollView
+        android:layout_width="373dp"
+        android:layout_height="636dp"
+        android:layout_marginTop="75dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.352"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@drawable/empty_tall_divider"
+            android:orientation="vertical"
+            android:showDividers="middle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.352"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="410dp"
@@ -42,7 +45,7 @@
             app:srcCompat="@drawable/mtaa_logo" />
 
         <TextView
-            android:id="@+id/homeText"
+            android:id="@+id/placeTop"
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -82,20 +85,8 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/RTCbutton"
-        android:layout_width="367dp"
-        android:layout_height="204dp"
-        android:layout_marginBottom="16dp"
-        android:text="Watch live"
-        android:textColor="?attr/colorOnSecondary"
-        app:cornerRadius="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/loading"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/loading"
+        android:id="@+id/loadingPT"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:color="@color/mtrl_btn_bg_color_selector"
@@ -114,7 +105,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="invisible" />
 
         <TextView
             android:id="@+id/textView4"

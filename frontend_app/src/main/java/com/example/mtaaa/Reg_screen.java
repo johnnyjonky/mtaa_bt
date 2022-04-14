@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -141,8 +142,9 @@ public class Reg_screen extends AppCompatActivity {
                 int Admin = obj.getInt("admin");
                 int UID = obj.getInt("UID");
 
-                JSONSaved.setUser(UID,Admin);
-
+                JSONSaved.setUser(UID);
+                Toast.makeText(getApplicationContext(),"Registered, we have logged you in automatically",Toast.LENGTH_LONG).show();
+                finish();
                 Intent intent = new Intent(this, Home_screen.class);
                 startActivity(intent);
 

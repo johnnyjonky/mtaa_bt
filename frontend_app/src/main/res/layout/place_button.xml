@@ -14,19 +14,26 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/placeTypeName"
+            android:id="@+id/placeName"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="57dp"
             android:gravity="center_vertical"
             android:text="TextView"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="34sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/placeDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/placeTypeImage"
+        android:id="@+id/placeImage"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:layout_weight="1"

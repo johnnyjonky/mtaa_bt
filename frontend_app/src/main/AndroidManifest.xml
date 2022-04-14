@@ -13,6 +13,9 @@
         <activity android:name=".Home_screen"/>
         <activity android:name=".Log_screen" />
         <activity android:name=".Reg_screen" />
+        <activity android:name=".Places_screen" />
+        <activity android:name=".Placeid_screen" />
+        <activity android:name=".Reviews_screen" />
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

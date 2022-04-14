@@ -1,5 +1,6 @@
 package com.example.mtaaa;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,7 +10,6 @@ import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,23 +26,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Home_screen extends AppCompatActivity {
-
+public class Reviews_screen extends AppCompatActivity {
     private static String rJson;
     public void setrJson(String str){
-        Home_screen.rJson = str;
+        Reviews_screen.rJson = str;
     }
     public String getrJson(){
-        return Home_screen.rJson;
+        return Reviews_screen.rJson;
     }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_screen);
-        Button rtc = findViewById(R.id.RTCbutton);
-        rtc.setVisibility(View.INVISIBLE);
-        getJson(JSONSaved.getUrl()+"/placetypes");
+        setContentView(R.layout.activity_review_screen);
+        getJson(JSONSaved.getUrl()+"/places/reviews/"+JSONSaved.getPlaceid());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -50,32 +48,36 @@ public class Home_screen extends AppCompatActivity {
         LinearLayout ln = findViewById(R.id.linear);
         try {
             JSONObject obj = new JSONObject(getrJson());
-            if(obj.has("placetypes")){
-                JSONArray obj3 = (JSONArray) obj.get("placetypes");
+            if(obj.has("reviews")){
+                JSONArray obj3 = (JSONArray) obj.get("reviews");
                 Log.i("TEST", String.valueOf(obj3.length()));
                 for (int i = 0; i < obj3.length(); i++) {
                     JSONObject obj4 = obj3.getJSONObject(i);
-                    if(obj4.has("placeName")){
-                        View child = getLayoutInflater().inflate(R.layout.placetype_button,null);
-                        TextView label = child.findViewById(R.id.placeTypeName);
-                        child.setOnClickListener(v -> {
-                            try {
-                                openByPlacetype(obj4.getInt("placeID"),obj4.getString("placeName"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                    if(obj4.has("userUsername")){
+                        View child = getLayoutInflater().inflate(R.layout.review_instance,null);
+                        TextView label = child.findViewById(R.id.reviewUsername);
+                        label.setText(obj4.getString("userUsername"));
+                        TextView desc = child.findViewById(R.id.reviewText);
+                        TextView rating = child.findViewById(R.id.reviewScore);
+                        rating.setText("Rating: ");
+                        if(obj4.has("reviewText")){
+                            desc.setText(obj4.getString("reviewText"));
+                        }
+                        else{
+                            desc.setText("");
+                        }
+                        if(obj4.has("rating")){
+                            for (int j = 0; j < obj4.getInt("rating"); j++) {
+                                rating.append(new String(Character.toChars(0x2B50)));
                             }
-                        });
-                        label.setText(obj4.getString("placeName"));
+                        }
                         ln.addView(child);
                         ConstraintLayout load = findViewById(R.id.loading);
-                        Button rtc = findViewById(R.id.RTCbutton);
                         Transition transition = new Slide(Gravity.TOP);
                         transition.setDuration(300);
                         transition.addTarget(load);
-                        transition.addTarget(rtc);
                         TransitionManager.beginDelayedTransition(findViewById(android.R.id.content),transition);
                         load.setVisibility(View.INVISIBLE);
-                        rtc.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -93,12 +95,5 @@ public class Home_screen extends AppCompatActivity {
                     update();
                 }, error -> setrJson("Something went wrong!"));
         queue.add(stringRequest);
-    }
-
-    public void openByPlacetype(int placetype, String placetypeName) {
-        JSONSaved.setPlacetype(placetype);
-        JSONSaved.setPlacetypeName(placetypeName);
-        Intent intent = new Intent(this, Places_screen.class);
-        startActivity(intent);
     }
 }

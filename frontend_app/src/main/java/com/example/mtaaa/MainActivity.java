@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button button3 = findViewById(R.id.button_guest);
         button3.setOnClickListener(v -> openHome());
+
+        if(JSONSaved.getUser() > 0) finish();
     }
 
     public void openLog() {

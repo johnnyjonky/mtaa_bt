@@ -1,13 +1,51 @@
 package com.example.mtaaa;
 
 public class JSONSaved {
-    private static int user;
+    private static int user = 0;
+    private static int isadmin = 0;
+    private static int placetype;
+    private static int placeid;
+    private static String placetypeName;
+    private static String url = "https://6159-147-175-190-171.ngrok.io";
 
-    public void setUser(int user){
+    public static void setUser(int user){
         JSONSaved.user = user;
     }
-    public int getUser(){
+    public static int getUser(){
         return JSONSaved.user;
+    }
+
+    public static void setIsadmin(int admin){
+        JSONSaved.isadmin = admin;
+    }
+
+    public int getIsadmin(){
+        return JSONSaved.isadmin;
+    }
+
+    public static void setPlacetype(int placetype){
+        JSONSaved.placetype = placetype;
+    }
+    public static int getPlacetype(){
+        return JSONSaved.placetype;
+    }
+
+    public static void setPlaceid(int placeid){
+        JSONSaved.placeid = placeid;
+    }
+    public static int getPlaceid(){
+        return JSONSaved.placeid;
+    }
+
+    public static void setPlacetypeName(String placetypeName){
+        JSONSaved.placetypeName = placetypeName;
+    }
+    public static String getPlacetypeName(){
+        return JSONSaved.placetypeName;
+    }
+
+    public static String getUrl(){
+        return JSONSaved.url;
     }
 
 }

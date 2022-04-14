@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,6 +64,7 @@ public class Log_screen extends AppCompatActivity {
         button = findViewById(R.id.button_logg);
         button.setOnClickListener(v -> loggin(JSONSaved.getUrl()+"/users/login"));
     }
+
 
     public void loggin(String url) {
 
@@ -148,8 +150,10 @@ public class Log_screen extends AppCompatActivity {
                 int Admin = obj.getInt("admin");
                 int UID = obj.getInt("UID");
 
-                JSONSaved.setUser(UID,Admin);
-
+                JSONSaved.setUser(UID);
+                JSONSaved.setIsadmin(Admin);
+                Toast.makeText(getApplicationContext(),"Successfully logged in",Toast.LENGTH_SHORT).show();
+                finish();
                 Intent intent = new Intent(this, Home_screen.class);
                 startActivity(intent);
 
