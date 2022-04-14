@@ -1,6 +1,7 @@
 package com.example.mtaaa;
 
 import android.app.DownloadManager;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
@@ -67,8 +68,8 @@ public class Log_screen extends AppCompatActivity {
         JSONObject jsonBody = new JSONObject();
 
         try {
-            jsonBody.put("username", "admin");
-            jsonBody.put("pw", "heslo");
+            jsonBody.put("username", name);
+            jsonBody.put("pw", password);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -110,41 +111,27 @@ public class Log_screen extends AppCompatActivity {
                 }
             }
 
-            /*
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("username","admin");
-                params.put("pw","heslo");
-                return params;
-            }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("Content-Type","raw");
-                return params;
-            }
-
-             */
         };
         queue.add(sr);
 
-        //Intent intent = new Intent(this, Home_screen.class);
-        //startActivity(intent);
+
     }
 
     void Logg()
     {
-        button.setText("som tu");
         try {
             JSONObject obj = new JSONObject(Log_getrJson());
-            if(obj.has("Status")){
+            if(obj.has("status")){
 
-                String Status = obj.getString("Status");
-                button.setText("Status");
+                String Status = obj.getString("status");
                 int Admin = obj.getInt("admin");
                 int UID = obj.getInt("UID");
+
+                JSONSaved.setUser(UID,Admin);
+
+                Intent intent = new Intent(this, Home_screen.class);
+                startActivity(intent);
 
             }
         } catch (JSONException e) {
@@ -153,64 +140,3 @@ public class Log_screen extends AppCompatActivity {
     }
 
 }
-
-
-/*
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest str = new StringRequest(Request.Method.POST, "https://e190-95-102-14-246.eu.ngrok.io/users/register",
-                response -> {
-                    button.setText("a");
-                }, error -> {
-                    button.setText("b");
-                }){
-            protected Map<String,String> getParams() throws AuthFailureError{
-                Map<String,String> params = new HashMap<>();
-                params.put("pw","heslo");
-                params.put("username", "adminko");
-                return params;
-            }
-        };
-        queue.add(str);
-
-
-        String url = "https://e190-95-102-14-246.eu.ngrok.io/users/login";
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("username", "admin");
-        params.put("pw", "heslo");
-
-        JSONObject jsonBody = new JSONObject();
-
-        try {
-            jsonBody.put("username", "admin");
-            jsonBody.put("pw", "heslo");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                url, jsonBody,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("JSONPost", response.toString());
-                        //pDialog.hide();
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("JSONPost", "Error: " + error.getMessage());
-                //pDialog.hide();
-            }
-        });
-        queue.add(jsonObjReq);
-
-
-        SQLiteDatabase db;
-
-
-         */
