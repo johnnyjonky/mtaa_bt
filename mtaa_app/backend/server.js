@@ -298,8 +298,8 @@ app.post('/users/register', function (req, res) {
     });
 });
 
-//get na prihlasenie pouzivatela
-app.get('/users/login', function (req, res) {
+//post na prihlasenie pouzivatela
+app.post('/users/login', function (req, res) {
     connectDB();
     console.log('GET received');
     req.on('data', function(data){
