@@ -40,10 +40,10 @@ public class Log_screen extends AppCompatActivity {
         setContentView(R.layout.activity_login_screen);
 
         button = findViewById(R.id.button_logg);
-        button.setOnClickListener(v -> loggin());
+        button.setOnClickListener(v -> loggin(JSONSaved.getUrl()+"/users/login"));
     }
 
-    public void loggin() {
+    public void loggin(String url) {
         EditText edt = findViewById(R.id.name);
         String name = edt.getText().toString();
 
@@ -60,38 +60,6 @@ public class Log_screen extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //getJson(JSONSaved.getUrl()+"/placetypes");
-
-
-        /*
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, "http://10.0.2.2:8080/users/login", null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray array = response.getJSONArray("loggin_status");
-
-                            for(int i = 0; i < array.length(); i++)
-                            {
-                                //JSONObject log_user = jsonArray.getJSON;
-                                JSONObject log_user = array.getJSONObject(i);
-                                String status = log_user.getString("status");
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }
-        );
-
-
-         */
 
         /*
 
@@ -110,7 +78,7 @@ public class Log_screen extends AppCompatActivity {
             }
         };
         queue.add(str);
-        */
+
 
         String url = "https://e190-95-102-14-246.eu.ngrok.io/users/login";
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -119,8 +87,17 @@ public class Log_screen extends AppCompatActivity {
         params.put("username", "admin");
         params.put("pw", "heslo");
 
+        JSONObject jsonBody = new JSONObject();
+
+        try {
+            jsonBody.put("username", "admin");
+            jsonBody.put("pw", "heslo");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                url, new JSONObject(params),
+                url, jsonBody,
                 new Response.Listener<JSONObject>() {
 
                     @Override
@@ -141,6 +118,46 @@ public class Log_screen extends AppCompatActivity {
 
         SQLiteDatabase db;
 
+
+         */
+
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        //for POST requests, only the following line should be changed to
+
+        StringRequest sr = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("HttpClient", "success! response: " + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("HttpClient", "error: " + error.toString());
+                        button.setText(error.toString());
+                    }
+                })
+        {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("username","admin");
+                params.put("pw","heslo");
+                return params;
+            }
+            /*
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","raw");
+                return params;
+            }
+
+             */
+        };
+        queue.add(sr);
 
         //Intent intent = new Intent(this, Home_screen.class);
         //startActivity(intent);
