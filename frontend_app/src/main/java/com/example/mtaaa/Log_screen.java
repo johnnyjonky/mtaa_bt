@@ -33,13 +33,13 @@ import java.util.Map;
 
 public class Log_screen extends AppCompatActivity {
 
-    Button button;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
-        button = findViewById(R.id.button_logg);
+        Button button = findViewById(R.id.button_logg);
         button.setOnClickListener(v -> loggin(JSONSaved.getUrl()+"/users/login"));
     }
 
@@ -136,7 +136,7 @@ public class Log_screen extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("HttpClient", "error: " + error.toString());
-                        button.setText(error.toString());
+                        //button.setText(error.toString());
                     }
                 })
         {
