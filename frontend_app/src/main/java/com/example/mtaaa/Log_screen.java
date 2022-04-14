@@ -1,5 +1,6 @@
 package com.example.mtaaa;
 
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,15 +31,19 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import kotlin.jvm.internal.Ref;
 
 
 public class Log_screen extends AppCompatActivity {
@@ -59,6 +65,9 @@ public class Log_screen extends AppCompatActivity {
     }
 
     public void loggin(String url) {
+
+        //int StatusCode;
+
         EditText edt = findViewById(R.id.name);
         String name = edt.getText().toString();
 
@@ -77,7 +86,6 @@ public class Log_screen extends AppCompatActivity {
         final String requestBody = jsonBody.toString();
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        //for POST requests, only the following line should be changed to
 
         StringRequest sr = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -91,10 +99,26 @@ public class Log_screen extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Log_screen.this);
+                        builder.setCancelable(true);
+                        builder.setTitle("Wrong name or password");
+                        builder.setMessage("name or password you typed is wrong");
+                        passField.setText("");
+
                         Log.e("HttpClient", "error: " + error.toString());
+                        builder.show();
                     }
                 })
         {
+
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                int StatusCode = response.statusCode;
+                return super.parseNetworkResponse(response);
+
+            }
 
             @Override
             public String getBodyContentType() {
@@ -110,12 +134,8 @@ public class Log_screen extends AppCompatActivity {
                     return null;
                 }
             }
-
-
         };
         queue.add(sr);
-
-
     }
 
     void Logg()
