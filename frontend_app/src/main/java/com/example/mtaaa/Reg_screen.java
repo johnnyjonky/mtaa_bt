@@ -73,7 +73,7 @@ public class Reg_screen extends AppCompatActivity {
         });
         queue.add(jsonObjReq);
 
-        loggin(url,name,password);
+        loggin(JSONSaved.getUrl()+"/users/login",name,password);
     }
 
     public void loggin(String url, String name, String password) {
