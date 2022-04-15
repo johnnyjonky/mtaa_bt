@@ -10,6 +10,7 @@ import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -41,6 +42,22 @@ public class Reviews_screen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_screen);
         getJson(JSONSaved.getUrl()+"/places/reviews/"+JSONSaved.getPlaceid());
+
+
+        Button button = findViewById(R.id.writeReview);
+        button.setOnClickListener(v -> writereview());
+
+        if(JSONSaved.getUser() == 0) {
+            button.setVisibility(View.INVISIBLE);
+            button.setEnabled(false);
+        }
+
+
+    }
+
+    public void writereview() {
+        Intent intent = new Intent(this, Log_screen.class);
+        startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
