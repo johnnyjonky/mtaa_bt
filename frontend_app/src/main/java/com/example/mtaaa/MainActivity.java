@@ -36,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openHome() {
+
+        JSONSaved.setIsadmin(0);
+        JSONSaved.setUser(0);
+
         Intent intent = new Intent(this, Home_screen.class);
         startActivity(intent);
     }

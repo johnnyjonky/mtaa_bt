@@ -1,6 +1,5 @@
 package com.example.mtaaa;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,8 +9,10 @@ import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,11 +42,35 @@ public class Reviews_screen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_screen);
         getJson(JSONSaved.getUrl()+"/places/reviews/"+JSONSaved.getPlaceid());
+
+
+        Button button = findViewById(R.id.writeReview);
+        button.setOnClickListener(v -> writereview());
+
+
+
+        if(JSONSaved.getUser() == 0) {
+            button.setVisibility(View.INVISIBLE);
+            button.setEnabled(false);
+        }
+
+        if(JSONSaved.getUser() == 0) {
+            button.setVisibility(View.INVISIBLE);
+            button.setEnabled(false);
+        }
+
+
+    }
+
+    public void writereview() {
+        Intent intent = new Intent(this, Write_review_screen.class);
+        startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void update() {
         LinearLayout ln = findViewById(R.id.linear);
+        int admin = JSONSaved.getIsadmin();
         try {
             JSONObject obj = new JSONObject(getrJson());
             if(obj.has("reviews")){
@@ -60,6 +85,15 @@ public class Reviews_screen extends AppCompatActivity {
                         TextView desc = child.findViewById(R.id.reviewText);
                         TextView rating = child.findViewById(R.id.reviewScore);
                         rating.setText("Rating: ");
+
+                        String revID = obj4.getString("reviewID");
+
+                        Button button2 = child.findViewById(R.id.button_delete_review);
+                        button2.setOnClickListener(v -> deletereview(revID));
+                        if(admin != 1) {
+                            button2.setVisibility(View.INVISIBLE);
+                        }
+
                         if(obj4.has("reviewText")){
                             desc.setText(obj4.getString("reviewText"));
                         }
@@ -84,6 +118,30 @@ public class Reviews_screen extends AppCompatActivity {
         } catch (JSONException e) {
             Log.e("JSONERROR", "unexpected JSON exception", e);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void deletereview(String revID)
+    {
+        int userid = JSONSaved.getUser();
+        String delete_url = JSONSaved.getUrl()+"/places/reviews/delete/" + revID + "/" + userid;
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, delete_url,
+                response -> {
+                    setrJson(response);
+                    refresh();
+                }, error -> setrJson("Something went wrong!"));
+        queue.add(stringRequest);
+    }
+
+    public void refresh()
+    {
+        Toast.makeText(getApplicationContext(),"Successfully deleted",Toast.LENGTH_SHORT).show();
+        finish();
+
+        Intent intent = new Intent(this, Reviews_screen.class);
+        startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

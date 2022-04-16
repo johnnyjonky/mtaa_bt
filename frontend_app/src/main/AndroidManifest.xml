@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mtaaa">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -10,13 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mtaaa">
-        <activity android:name=".Home_screen"/>
+        <activity android:name=".Add_place_screen"></activity>
+        <activity android:name=".Edit_place_screen" />
+        <activity android:name=".Write_review_screen" />
+        <activity android:name=".Home_screen" />
         <activity android:name=".Log_screen" />
         <activity android:name=".Reg_screen" />
         <activity android:name=".Places_screen" />
         <activity android:name=".Placeid_screen" />
         <activity android:name=".Reviews_screen" />
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
