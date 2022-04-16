@@ -50,9 +50,7 @@ import kotlin.jvm.internal.Ref;
 public class Log_screen extends AppCompatActivity {
 
     Button button;
-
     String name;
-
     private static String rJson;
     public void Log_setrJson(String str){
         Log_screen.rJson = str;
@@ -155,9 +153,7 @@ public class Log_screen extends AppCompatActivity {
 
                 JSONSaved.setUser(UID);
                 JSONSaved.setIsadmin(Admin);
-
                 JSONSaved.setUser_name(name);
-
                 Toast.makeText(getApplicationContext(),"Successfully logged in",Toast.LENGTH_SHORT).show();
                 finish();
                 Intent intent = new Intent(this, Home_screen.class);

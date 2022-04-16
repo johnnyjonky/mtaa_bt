@@ -29,8 +29,8 @@ import java.util.Map;
 
 public class Reg_screen extends AppCompatActivity {
 
-    private static String rJson;
     String name;
+    private static String rJson;
     public void Reg_setrJson(String str){ Reg_screen.rJson = str;    }
     public String Reg_getrJson(){ return Reg_screen.rJson;}
 
@@ -143,9 +143,8 @@ public class Reg_screen extends AppCompatActivity {
                 int Admin = obj.getInt("admin");
                 int UID = obj.getInt("UID");
 
-
-                JSONSaved.setUser_name(name);
                 JSONSaved.setUser(UID);
+                JSONSaved.setUser_name(name);
                 Toast.makeText(getApplicationContext(),"Registered, we have logged you in automatically",Toast.LENGTH_LONG).show();
                 finish();
                 Intent intent = new Intent(this, Home_screen.class);

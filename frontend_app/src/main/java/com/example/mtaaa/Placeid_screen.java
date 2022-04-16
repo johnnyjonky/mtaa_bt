@@ -3,6 +3,7 @@ package com.example.mtaaa;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.transition.Fade;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionManager;
@@ -34,29 +35,30 @@ public class Placeid_screen extends AppCompatActivity {
     public String getrJson(){
         return Placeid_screen.rJson;
     }
-
+    
     int id = JSONSaved.getUser();
     int admin = JSONSaved.getIsadmin();
-
+    
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_screen);
+        Button review = findViewById(R.id.reviewButton);
+        review.setVisibility(View.INVISIBLE);
         getJson(JSONSaved.getUrl()+"/places/data/"+JSONSaved.getPlaceid());
+    }
+    
+    Button button1 = findViewById(R.id.button_del_place);
+    button1.setOnClickListener(v -> delete_place());
 
+    Button button2 = findViewById(R.id.button_edit_place);
+    button2.setOnClickListener(v -> edit_place());
 
-
-        Button button1 = findViewById(R.id.button_del_place);
-        button1.setOnClickListener(v -> delete_place());
-
-        Button button2 = findViewById(R.id.button_edit_place);
-        button2.setOnClickListener(v -> edit_place());
-
-        if(JSONSaved.getUser() == 0) {
-            button2.setVisibility(View.INVISIBLE); }
-        if(JSONSaved.getIsadmin() == 0) {
-            button1.setVisibility(View.INVISIBLE); }
+    if(JSONSaved.getUser() == 0) {
+        button2.setVisibility(View.INVISIBLE); }
+    if(JSONSaved.getIsadmin() == 0) {
+        button1.setVisibility(View.INVISIBLE); }
     }
 
     public void edit_place()
@@ -107,13 +109,15 @@ public class Placeid_screen extends AppCompatActivity {
                 if(obj3.has("longDescription")) longDesc.setText(obj3.getString("longDescription"));
                 if(obj3.has("location")) location.setText("Location: " + obj3.getString("location"));
                 ConstraintLayout load = findViewById(R.id.loadingPT);
-                Transition transition = new Slide(Gravity.TOP);
+                Button review = findViewById(R.id.reviewButton);
+                Transition transition = new Fade(Fade.MODE_OUT);
                 transition.setDuration(300);
                 transition.addTarget(load);
+                transition.addTarget(review);
                 TransitionManager.beginDelayedTransition(findViewById(android.R.id.content),transition);
                 load.setVisibility(View.INVISIBLE);
+                review.setVisibility(View.VISIBLE);
                 Log.i("TEST", String.valueOf(obj3.length()));
-                Button review = findViewById(R.id.reviewButton);
                 review.setOnClickListener(v -> {
                         Intent intent = new Intent(this, Reviews_screen.class);
                         startActivity(intent);

@@ -1,17 +1,19 @@
 package com.example.mtaaa;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.transition.Fade;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -42,8 +44,6 @@ public class Reviews_screen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_screen);
         getJson(JSONSaved.getUrl()+"/places/reviews/"+JSONSaved.getPlaceid());
-
-
         Button button = findViewById(R.id.writeReview);
         button.setOnClickListener(v -> writereview());
 
@@ -69,8 +69,8 @@ public class Reviews_screen extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void update() {
-        LinearLayout ln = findViewById(R.id.linear);
         int admin = JSONSaved.getIsadmin();
+        LinearLayout ln = findViewById(R.id.linear);
         try {
             JSONObject obj = new JSONObject(getrJson());
             if(obj.has("reviews")){
@@ -85,7 +85,7 @@ public class Reviews_screen extends AppCompatActivity {
                         TextView desc = child.findViewById(R.id.reviewText);
                         TextView rating = child.findViewById(R.id.reviewScore);
                         rating.setText("Rating: ");
-
+                        
                         String revID = obj4.getString("reviewID");
 
                         Button button2 = child.findViewById(R.id.button_delete_review);
@@ -93,7 +93,7 @@ public class Reviews_screen extends AppCompatActivity {
                         if(admin != 1) {
                             button2.setVisibility(View.INVISIBLE);
                         }
-
+                        
                         if(obj4.has("reviewText")){
                             desc.setText(obj4.getString("reviewText"));
                         }
@@ -107,7 +107,7 @@ public class Reviews_screen extends AppCompatActivity {
                         }
                         ln.addView(child);
                         ConstraintLayout load = findViewById(R.id.loading);
-                        Transition transition = new Slide(Gravity.TOP);
+                        Transition transition = new Fade(Fade.MODE_OUT);
                         transition.setDuration(300);
                         transition.addTarget(load);
                         TransitionManager.beginDelayedTransition(findViewById(android.R.id.content),transition);
@@ -119,7 +119,7 @@ public class Reviews_screen extends AppCompatActivity {
             Log.e("JSONERROR", "unexpected JSON exception", e);
         }
     }
-
+    
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void deletereview(String revID)
     {
@@ -143,6 +143,7 @@ public class Reviews_screen extends AppCompatActivity {
         Intent intent = new Intent(this, Reviews_screen.class);
         startActivity(intent);
     }
+    
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void getJson(String url){
