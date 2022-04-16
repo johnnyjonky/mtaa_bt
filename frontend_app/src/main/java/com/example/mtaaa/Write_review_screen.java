@@ -186,7 +186,7 @@ public class Write_review_screen extends AppCompatActivity {
     {
         Toast.makeText(getApplicationContext(),"Review succesfully send in",Toast.LENGTH_SHORT).show();
         finish();
-        Intent intent = new Intent(this, Home_screen.class);
+        Intent intent = new Intent(this, Reviews_screen.class);
         startActivity(intent);
     }
 }
