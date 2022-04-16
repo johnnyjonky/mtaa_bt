@@ -60,7 +60,6 @@ public class Places_screen extends AppCompatActivity {
         Intent intent = new Intent(this, Add_place_screen.class);
         startActivity(intent);
     }
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void update() {

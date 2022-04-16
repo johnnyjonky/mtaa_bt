@@ -47,19 +47,19 @@ public class Placeid_screen extends AppCompatActivity {
         Button review = findViewById(R.id.reviewButton);
         review.setVisibility(View.INVISIBLE);
         getJson(JSONSaved.getUrl()+"/places/data/"+JSONSaved.getPlaceid());
+
+        Button button1 = findViewById(R.id.button_del_place);
+        button1.setOnClickListener(v -> delete_place());
+
+        Button button2 = findViewById(R.id.button_edit_place);
+        button2.setOnClickListener(v -> edit_place());
+
+        if(JSONSaved.getUser() == 0) {
+            button2.setVisibility(View.INVISIBLE); }
+        if(JSONSaved.getIsadmin() == 0) {
+            button1.setVisibility(View.INVISIBLE); }
     }
     
-    Button button1 = findViewById(R.id.button_del_place);
-    button1.setOnClickListener(v -> delete_place());
-
-    Button button2 = findViewById(R.id.button_edit_place);
-    button2.setOnClickListener(v -> edit_place());
-
-    if(JSONSaved.getUser() == 0) {
-        button2.setVisibility(View.INVISIBLE); }
-    if(JSONSaved.getIsadmin() == 0) {
-        button1.setVisibility(View.INVISIBLE); }
-    }
 
     public void edit_place()
     {

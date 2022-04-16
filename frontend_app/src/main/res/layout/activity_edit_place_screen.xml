@@ -23,12 +23,12 @@
 
         <TextView
             android:id="@+id/editPlacetypeTop"
-            android:layout_width="246dp"
+            android:layout_width="224dp"
             android:layout_height="match_parent"
             android:layout_marginRight="40dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="Add a placetype"
+            android:text="Edit place"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -49,8 +49,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,7 +79,6 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/shape"
                 android:ems="10"
-                android:hint="Name"
                 android:inputType="textPersonName" />
 
             <TextView
@@ -168,10 +166,10 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="20dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="4dp"
                 android:text="Upload photo"
+                android:layout_marginLeft="20dp"
                 android:textAllCaps="false"
                 android:textColor="?attr/colorOnSecondary"
                 android:textSize="20sp"
@@ -187,10 +185,10 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="20dp"
                 android:layout_marginBottom="100dp"
                 android:text="Submit"
                 android:textAllCaps="false"
+                android:layout_marginLeft="20dp"
                 android:textColor="?attr/colorOnSecondary"
                 android:textSize="20sp"
                 android:textStyle="bold"

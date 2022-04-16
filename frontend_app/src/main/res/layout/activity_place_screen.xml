@@ -94,7 +94,7 @@
 
         <TextView
             android:id="@+id/placeholder"
-            android:layout_width="150dp"
+            android:layout_width="88dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
@@ -109,26 +109,19 @@
             android:layout_weight="1"
             app:srcCompat="@drawable/empty_tall_divider" />
 
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+        <Button
+            android:id="@+id/button_del_place"
+            android:layout_width="12dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/empty_tall_divider" />
-
-        <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/empty_tall_divider" />
+            app:icon="@android:drawable/ic_menu_delete" />
 
         <Button
-            android:id="@+id/button2"
-            android:layout_width="28dp"
-            android:layout_height="match_parent"
+            android:id="@+id/button_edit_place"
+            android:layout_width="12dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="?attr/actionModeCloseDrawable" />
+            app:icon="@android:drawable/ic_menu_edit" />
 
     </LinearLayout>
 
@@ -146,8 +139,8 @@
 
         <ImageView
             android:id="@+id/imageView9"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="410dp"
+            android:layout_height="0dp"
             android:background="?attr/colorPrimaryVariant"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -160,7 +153,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
-            android:text="Loading place"
+            android:text="Loading for you"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
