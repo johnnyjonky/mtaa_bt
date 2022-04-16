@@ -1,6 +1,7 @@
 package com.example.mtaaa;
 
 public class JSONSaved {
+    private static String user_name;
     private static int user = 0;
     private static int isadmin = 0;
     private static int placetype;
@@ -18,8 +19,11 @@ public class JSONSaved {
     public static void setIsadmin(int admin){
         JSONSaved.isadmin = admin;
     }
+    
+    public static void setUser_name(String name){ JSONSaved.user_name = name; }
+    public static String getUser_name(){ return JSONSaved.user_name; }
 
-    public int getIsadmin(){
+    public static int getIsadmin(){
         return JSONSaved.isadmin;
     }
 
