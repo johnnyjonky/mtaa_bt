@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,12 +35,51 @@ public class Placeid_screen extends AppCompatActivity {
         return Placeid_screen.rJson;
     }
 
+    int id = JSONSaved.getUser();
+    int admin = JSONSaved.getIsadmin();
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_screen);
         getJson(JSONSaved.getUrl()+"/places/data/"+JSONSaved.getPlaceid());
+
+
+
+        Button button1 = findViewById(R.id.button_del_place);
+        button1.setOnClickListener(v -> delete_place());
+
+        Button button2 = findViewById(R.id.button_edit_place);
+
+        if(JSONSaved.getUser() == 0) {
+            button2.setVisibility(View.INVISIBLE); }
+        if(JSONSaved.getIsadmin() == 0) {
+            button1.setVisibility(View.INVISIBLE); }
+    }
+
+    public void delete_place()
+    {
+        int userid = JSONSaved.getUser();
+        int placeid = JSONSaved.getPlaceid();
+        String delete_url = JSONSaved.getUrl()+"/places/delete/" + placeid + "/" + userid;
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, delete_url,
+                response -> {
+                    setrJson(response);
+                    refresh();
+                }, error -> setrJson("Something went wrong!"));
+        queue.add(stringRequest);
+    }
+
+    public void refresh()
+    {
+        Toast.makeText(getApplicationContext(),"Successfully deleted",Toast.LENGTH_SHORT).show();
+        finish();
+
+        Intent intent = new Intent(this, Places_screen.class);
+        startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -68,8 +108,8 @@ public class Placeid_screen extends AppCompatActivity {
                 Log.i("TEST", String.valueOf(obj3.length()));
                 Button review = findViewById(R.id.reviewButton);
                 review.setOnClickListener(v -> {
-                        Intent intent = new Intent(this, Reviews_screen.class);
-                        startActivity(intent);
+                    Intent intent = new Intent(this, Reviews_screen.class);
+                    startActivity(intent);
                 });
             }
         } catch (JSONException e) {
