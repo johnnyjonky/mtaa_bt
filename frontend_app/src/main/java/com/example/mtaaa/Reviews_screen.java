@@ -1,6 +1,5 @@
 package com.example.mtaaa;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,6 +46,13 @@ public class Reviews_screen extends AppCompatActivity {
         Button button = findViewById(R.id.writeReview);
         button.setOnClickListener(v -> writereview());
 
+
+
+        if(JSONSaved.getUser() == 0) {
+            button.setVisibility(View.INVISIBLE);
+            button.setEnabled(false);
+        }
+
         if(JSONSaved.getUser() == 0) {
             button.setVisibility(View.INVISIBLE);
             button.setEnabled(false);
@@ -56,13 +62,14 @@ public class Reviews_screen extends AppCompatActivity {
     }
 
     public void writereview() {
-        Intent intent = new Intent(this, Log_screen.class);
+        Intent intent = new Intent(this, Write_review_screen.class);
         startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void update() {
         LinearLayout ln = findViewById(R.id.linear);
+        int admin = JSONSaved.getIsadmin();
         try {
             JSONObject obj = new JSONObject(getrJson());
             if(obj.has("reviews")){
@@ -77,6 +84,13 @@ public class Reviews_screen extends AppCompatActivity {
                         TextView desc = child.findViewById(R.id.reviewText);
                         TextView rating = child.findViewById(R.id.reviewScore);
                         rating.setText("Rating: ");
+
+                        Button button2 = child.findViewById(R.id.button_delete_review);
+                        button2.setOnClickListener(v -> deletereview());
+                        if(admin != 1) {
+                            button2.setVisibility(View.INVISIBLE);
+                        }
+
                         if(obj4.has("reviewText")){
                             desc.setText(obj4.getString("reviewText"));
                         }
@@ -101,6 +115,11 @@ public class Reviews_screen extends AppCompatActivity {
         } catch (JSONException e) {
             Log.e("JSONERROR", "unexpected JSON exception", e);
         }
+    }
+
+    public void deletereview()
+    {
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
