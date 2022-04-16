@@ -3,6 +3,7 @@ package com.example.mtaaa;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.transition.Fade;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionManager;
@@ -42,6 +43,16 @@ public class Home_screen extends AppCompatActivity {
         setContentView(R.layout.activity_home_screen);
         Button rtc = findViewById(R.id.RTCbutton);
         rtc.setVisibility(View.INVISIBLE);
+        Button sb = findViewById(R.id.SBbutton);
+        sb.setVisibility(View.INVISIBLE);
+        rtc.setOnClickListener(v -> {
+            Intent intent = new Intent(this, RTCConnScreen.class);
+            startActivity(intent);
+        });
+        sb.setOnClickListener(v -> {
+            Intent intent = new Intent(this, Shout_screen.class);
+            startActivity(intent);
+        });
         getJson(JSONSaved.getUrl()+"/placetypes");
     }
 
@@ -69,13 +80,16 @@ public class Home_screen extends AppCompatActivity {
                         ln.addView(child);
                         ConstraintLayout load = findViewById(R.id.loading);
                         Button rtc = findViewById(R.id.RTCbutton);
-                        Transition transition = new Slide(Gravity.TOP);
+                        Button sb = findViewById(R.id.SBbutton);
+                        Transition transition = new Fade(Fade.MODE_OUT);
                         transition.setDuration(300);
                         transition.addTarget(load);
                         transition.addTarget(rtc);
+                        transition.addTarget(sb);
                         TransitionManager.beginDelayedTransition(findViewById(android.R.id.content),transition);
                         load.setVisibility(View.INVISIBLE);
                         rtc.setVisibility(View.VISIBLE);
+                        sb.setVisibility(View.VISIBLE);
                     }
                 }
             }

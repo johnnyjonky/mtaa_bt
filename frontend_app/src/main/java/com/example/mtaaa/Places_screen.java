@@ -3,14 +3,13 @@ package com.example.mtaaa;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.transition.Fade;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,8 +21,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,23 +42,6 @@ public class Places_screen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placetype_screen);
         getJson(JSONSaved.getUrl()+"/places/type/"+JSONSaved.getPlacetype());
-
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(v -> add_place());
-
-        if(JSONSaved.getUser() == 0) {
-            fab.setVisibility(View.INVISIBLE);
-        }
-
-
-
-    }
-
-    public void add_place()
-    {
-        Intent intent = new Intent(this, Add_place_screen.class);
-        startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -96,7 +76,7 @@ public class Places_screen extends AppCompatActivity {
                         });
                         ln.addView(child);
                         ConstraintLayout load = findViewById(R.id.loadingPT);
-                        Transition transition = new Slide(Gravity.TOP);
+                        Transition transition = new Fade(Fade.MODE_OUT);
                         transition.setDuration(300);
                         transition.addTarget(load);
                         TransitionManager.beginDelayedTransition(findViewById(android.R.id.content),transition);

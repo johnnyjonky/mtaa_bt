@@ -30,7 +30,6 @@ import java.util.Map;
 public class Reg_screen extends AppCompatActivity {
 
     private static String rJson;
-    String name;
     public void Reg_setrJson(String str){ Reg_screen.rJson = str;    }
     public String Reg_getrJson(){ return Reg_screen.rJson;}
 
@@ -45,7 +44,7 @@ public class Reg_screen extends AppCompatActivity {
 
     public void register(String url) {
         EditText edt = findViewById(R.id.nameRG);
-        name = edt.getText().toString();
+        String name = edt.getText().toString();
 
         EditText passField = findViewById(R.id.pwRG);
         String password = passField.getText().toString();
@@ -143,8 +142,6 @@ public class Reg_screen extends AppCompatActivity {
                 int Admin = obj.getInt("admin");
                 int UID = obj.getInt("UID");
 
-
-                JSONSaved.setUser_name(name);
                 JSONSaved.setUser(UID);
                 Toast.makeText(getApplicationContext(),"Registered, we have logged you in automatically",Toast.LENGTH_LONG).show();
                 finish();

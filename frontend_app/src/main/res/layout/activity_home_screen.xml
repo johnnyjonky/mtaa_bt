@@ -84,13 +84,30 @@
 
     <Button
         android:id="@+id/RTCbutton"
-        android:layout_width="367dp"
-        android:layout_height="204dp"
+        android:layout_width="361dp"
+        android:layout_height="75dp"
         android:layout_marginBottom="16dp"
-        android:text="Watch live"
+        android:text="Show a place to friend"
+        android:textAllCaps="false"
         android:textColor="?attr/colorOnSecondary"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/loading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/SBbutton"
+        android:layout_width="361dp"
+        android:layout_height="75dp"
+        android:text="View Shoutbox"
+        android:textAllCaps="false"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/RTCbutton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -108,8 +125,8 @@
 
         <ImageView
             android:id="@+id/imageView9"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="?attr/colorPrimaryVariant"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
