@@ -37,7 +37,7 @@ public class Placeid_screen extends AppCompatActivity {
     }
     
     int id = JSONSaved.getUser();
-    int admin = JSONSaved.getIsadmin()
+    int admin = JSONSaved.getIsadmin();
     
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
