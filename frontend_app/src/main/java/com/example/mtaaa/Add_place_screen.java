@@ -2,7 +2,6 @@ package com.example.mtaaa;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,16 +39,16 @@ public class Add_place_screen extends AppCompatActivity {
 
     public void submit()
     {
-        EditText edt = findViewById(R.id.placeTypeNameAdd);
+        EditText edt = findViewById(R.id.placeTypeNameEdit);
         String name = edt.getText().toString();
 
-        edt = findViewById(R.id.editTextTextMultiLine);
+        edt = findViewById(R.id.placeTypeSDestEdit);
         String shortdesc    = edt.getText().toString();
 
-        edt = findViewById(R.id.editTextTextMultiLine2);
+        edt = findViewById(R.id.placeTypeLDestEdit);
         String longdesc     = edt.getText().toString();
 
-        edt = findViewById(R.id.editTextTextMultiLine3);
+        edt = findViewById(R.id.placeTypeLocationEdit);
         String location     = edt.getText().toString();
 
         JSONObject jsonBody = new JSONObject();
