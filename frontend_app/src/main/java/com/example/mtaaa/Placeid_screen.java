@@ -51,11 +51,18 @@ public class Placeid_screen extends AppCompatActivity {
         button1.setOnClickListener(v -> delete_place());
 
         Button button2 = findViewById(R.id.button_edit_place);
+        button2.setOnClickListener(v -> edit_place());
 
         if(JSONSaved.getUser() == 0) {
             button2.setVisibility(View.INVISIBLE); }
         if(JSONSaved.getIsadmin() == 0) {
             button1.setVisibility(View.INVISIBLE); }
+    }
+
+    public void edit_place()
+    {
+        Intent intent = new Intent(this, Edit_place_screen.class);
+        startActivity(intent);
     }
 
     public void delete_place()
@@ -108,8 +115,8 @@ public class Placeid_screen extends AppCompatActivity {
                 Log.i("TEST", String.valueOf(obj3.length()));
                 Button review = findViewById(R.id.reviewButton);
                 review.setOnClickListener(v -> {
-                    Intent intent = new Intent(this, Reviews_screen.class);
-                    startActivity(intent);
+                        Intent intent = new Intent(this, Reviews_screen.class);
+                        startActivity(intent);
                 });
             }
         } catch (JSONException e) {
