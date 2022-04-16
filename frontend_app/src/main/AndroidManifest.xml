@@ -13,6 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mtaaa">
+        <activity android:name=".Add_place_screen"></activity>
+        <activity android:name=".Edit_place_screen" />
+        <activity android:name=".Write_review_screen" />
         <activity android:name=".Home_screen"/>
         <activity android:name=".Log_screen" />
         <activity android:name=".Reg_screen" />
