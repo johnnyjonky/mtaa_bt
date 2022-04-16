@@ -52,13 +52,6 @@ public class Reviews_screen extends AppCompatActivity {
             button.setVisibility(View.INVISIBLE);
             button.setEnabled(false);
         }
-
-        if(JSONSaved.getUser() == 0) {
-            button.setVisibility(View.INVISIBLE);
-            button.setEnabled(false);
-        }
-
-
     }
 
     public void writereview() {
