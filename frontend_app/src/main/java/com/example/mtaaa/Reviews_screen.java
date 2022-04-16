@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,6 +53,13 @@ public class Reviews_screen extends AppCompatActivity {
             button.setVisibility(View.INVISIBLE);
             button.setEnabled(false);
         }
+
+        if(JSONSaved.getUser() == 0) {
+            button.setVisibility(View.INVISIBLE);
+            button.setEnabled(false);
+        }
+
+
     }
 
     public void writereview() {
@@ -78,8 +86,10 @@ public class Reviews_screen extends AppCompatActivity {
                         TextView rating = child.findViewById(R.id.reviewScore);
                         rating.setText("Rating: ");
 
+                        String revID = obj4.getString("reviewID");
+
                         Button button2 = child.findViewById(R.id.button_delete_review);
-                        button2.setOnClickListener(v -> deletereview());
+                        button2.setOnClickListener(v -> deletereview(revID));
                         if(admin != 1) {
                             button2.setVisibility(View.INVISIBLE);
                         }
@@ -110,9 +120,28 @@ public class Reviews_screen extends AppCompatActivity {
         }
     }
 
-    public void deletereview()
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void deletereview(String revID)
     {
+        int userid = JSONSaved.getUser();
+        String delete_url = JSONSaved.getUrl()+"/places/reviews/delete/" + revID + "/" + userid;
 
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, delete_url,
+                response -> {
+                    setrJson(response);
+                    refresh();
+                }, error -> setrJson("Something went wrong!"));
+        queue.add(stringRequest);
+    }
+
+    public void refresh()
+    {
+        Toast.makeText(getApplicationContext(),"Successfully deleted",Toast.LENGTH_SHORT).show();
+        finish();
+
+        Intent intent = new Intent(this, Reviews_screen.class);
+        startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
