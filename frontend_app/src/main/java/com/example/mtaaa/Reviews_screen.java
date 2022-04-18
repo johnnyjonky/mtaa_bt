@@ -143,6 +143,8 @@ public class Reviews_screen extends AppCompatActivity {
                     }
                 }
             }
+            View divider = getLayoutInflater().inflate(R.layout.empty_end,null);
+            ln.addView(divider);
         } catch (JSONException e) {
             Log.e("JSONERROR", "unexpected JSON exception", e);
         }

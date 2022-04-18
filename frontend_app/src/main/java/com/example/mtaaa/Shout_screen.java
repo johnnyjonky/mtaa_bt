@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -178,6 +179,8 @@ public class Shout_screen extends AppCompatActivity {
                     }
                 }
             }
+            View divider = getLayoutInflater().inflate(R.layout.empty_end,null);
+            ln.addView(divider);
         } catch (JSONException e) {
             Log.e("JSONERROR", "unexpected JSON exception", e);
         }
