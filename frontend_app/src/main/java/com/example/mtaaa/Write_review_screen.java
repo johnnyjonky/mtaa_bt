@@ -6,13 +6,17 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -37,11 +41,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 public class Write_review_screen extends AppCompatActivity {
 
+    private static final int RESULT_LOAD_IMAGE = 0;
+    private static final int REQUEST_LOAD_IMAGE = 0;
     private static String rJson;
+    private static String uploadedImage;
+    public static void setUploadedImage(String str) { Write_review_screen.uploadedImage = str;}
+    public String getUploadedImage(){return Write_review_screen.uploadedImage;}
     public void setrJson(String str){
         Write_review_screen.rJson = str;
     }
@@ -63,6 +75,16 @@ public class Write_review_screen extends AppCompatActivity {
         rtb.setStepSize(1); //set color
         Button button2 = findViewById(R.id.uploadReview);
         button2.setOnClickListener(v -> upload());
+
+        Button revph = findViewById(R.id.uploadReviewImg);
+        revph.setOnClickListener(v -> {
+            Intent i = new Intent(
+                    Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+            startActivityForResult(i, RESULT_LOAD_IMAGE);
+
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -79,6 +101,44 @@ public class Write_review_screen extends AppCompatActivity {
 
         SendReview(name,rating,review,JSONSaved.getUrl()+"/places/reviews/create/"+JSONSaved.getPlaceid()+"/"+JSONSaved.getUser());
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Uri selectedImage = null;
+
+        if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK) {
+            Log.i("upload","NOK");
+            selectedImage = data.getData();
+            InputStream in;
+            try {
+                in = getContentResolver().openInputStream(selectedImage);
+                final Bitmap selected_img = BitmapFactory.decodeStream(in);
+                encodeTobase64(selected_img);
+                Button revph = findViewById(R.id.uploadReviewImg);
+                revph.setText("Photo chosen");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "An error occured!", Toast.LENGTH_LONG).show();
+            }
+            //Bitmap imageBitmap = (Bitmap) extras.get("data");
+            Log.i("upload", String.valueOf(data));
+        }
+    }
+
+    public static String encodeTobase64(Bitmap image) {
+        Bitmap immagex=Bitmap.createScaledBitmap(image,200,200,true);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immagex.compress(Bitmap.CompressFormat.JPEG, 40, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b,Base64.DEFAULT);
+
+        Log.i("LOOK", String.valueOf(imageEncoded.length()));
+        setUploadedImage(imageEncoded);
+
+        return imageEncoded;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -118,7 +178,7 @@ public class Write_review_screen extends AppCompatActivity {
         try {
             jsonBody.put("userUsername", name);
             jsonBody.put("reviewText", text);
-            jsonBody.put("revPhoto", "");
+            jsonBody.put("revPhoto", getUploadedImage());
             jsonBody.put("rating", raiting);
         } catch (JSONException e) {
             e.printStackTrace();

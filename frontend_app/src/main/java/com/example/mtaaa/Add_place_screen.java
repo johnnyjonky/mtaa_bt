@@ -3,7 +3,11 @@ package com.example.mtaaa;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,9 +26,18 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 public class Add_place_screen extends AppCompatActivity {
+
+    private static final int RESULT_LOAD_IMAGE = 0;
+    private static final int REQUEST_LOAD_IMAGE = 0;
+    private static String uploadedImage;
+    public static void setUploadedImage(String str) { Add_place_screen.uploadedImage = str;}
+    public String getUploadedImage(){return Add_place_screen.uploadedImage;}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +47,55 @@ public class Add_place_screen extends AppCompatActivity {
         Button button = findViewById(R.id.submit_place);
         button.setOnClickListener(v -> submit());
 
+        Button revph = findViewById(R.id.uploadPlacetypeImg);
+        revph.setOnClickListener(v -> {
+            Intent i = new Intent(
+                    Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+            startActivityForResult(i, RESULT_LOAD_IMAGE);
+
+        });
+
         //get placetypes
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Uri selectedImage = null;
+
+        if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK) {
+            Log.i("upload","NOK");
+            selectedImage = data.getData();
+            InputStream in;
+            try {
+                in = getContentResolver().openInputStream(selectedImage);
+                final Bitmap selected_img = BitmapFactory.decodeStream(in);
+                encodeTobase64(selected_img);
+                Button revph = findViewById(R.id.uploadPlacetypeImg);
+                revph.setText("Photo chosen");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "An error occured!", Toast.LENGTH_LONG).show();
+            }
+            //Bitmap imageBitmap = (Bitmap) extras.get("data");
+            Log.i("upload", String.valueOf(data));
+        }
+    }
+
+    public static String encodeTobase64(Bitmap image) {
+        Bitmap immagex=Bitmap.createScaledBitmap(image,200,200,true);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immagex.compress(Bitmap.CompressFormat.JPEG, 40, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b,Base64.DEFAULT);
+
+        Log.i("LOOK", String.valueOf(imageEncoded.length()));
+        setUploadedImage(imageEncoded);
+
+        return imageEncoded;
     }
 
     public void submit()
@@ -57,7 +118,7 @@ public class Add_place_screen extends AppCompatActivity {
             jsonBody.put("name", name);
             jsonBody.put("shortDescription", shortdesc);
             jsonBody.put("longDescription", longdesc);
-            jsonBody.put("photo", "");
+            jsonBody.put("photo", getUploadedImage());
             jsonBody.put("location", location);
         } catch (JSONException e) {
             e.printStackTrace();

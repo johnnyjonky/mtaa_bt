@@ -1,12 +1,15 @@
 package com.example.mtaaa;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -23,6 +26,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -91,6 +96,8 @@ public class Placeid_screen extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void update() {
         try {
@@ -102,8 +109,31 @@ public class Placeid_screen extends AppCompatActivity {
                 TextView longDesc = findViewById(R.id.placeLongDesc);
                 TextView location = findViewById(R.id.placeLocation);
                 ImageView image = findViewById(R.id.placeImg);
-                image.setBackgroundResource(R.drawable.shape);
-                image.setImageResource(R.drawable.mtaa_logo);
+                image.setBackgroundResource(R.drawable.shapeplace);
+                if(obj3.has("photo")){
+                    JSONObject photoobj = obj3.getJSONObject("photo");
+                    JSONArray photoarr = photoobj.getJSONArray("data");
+                    Log.i("len", String.valueOf(photoarr.length()));
+                    try {
+                        byte[] bytes = new byte[photoarr.length()];
+                        for(int b=0;b<photoarr.length();b++){
+                            bytes[b]=(byte)(((int)photoarr.get(b)) & 0xFF);
+                        }
+                        byte[] imagedec = Base64.decode(bytes,Base64.DEFAULT);
+                        Log.i("photo", String.valueOf(bytes));
+                        Bitmap decodedPhoto = BitmapFactory.decodeByteArray(imagedec,0,imagedec.length);
+                        Log.i("photo", String.valueOf(decodedPhoto));
+                        try {
+                            image.setImageBitmap(Bitmap.createScaledBitmap(decodedPhoto,900,900,false));
+                        }
+                        catch (NullPointerException e){
+                            Log.i("photo", String.valueOf(e));
+                        }
+                    }
+                    catch (IllegalArgumentException e){
+                        Log.i("photo", String.valueOf(e));
+                    }
+                }
                 if(obj3.has("name")) name.setText(obj3.getString("name"));
                 if(obj3.has("shortDescription")) shortDesc.setText(obj3.getString("shortDescription"));
                 if(obj3.has("longDescription")) longDesc.setText(obj3.getString("longDescription"));

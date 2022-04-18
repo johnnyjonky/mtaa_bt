@@ -2,15 +2,19 @@ package com.example.mtaaa;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Button;
@@ -87,7 +91,31 @@ public class Reviews_screen extends AppCompatActivity {
                         rating.setText("Rating: ");
                         
                         String revID = obj4.getString("reviewID");
-
+                        if(obj4.has("revPhoto")){
+                            JSONObject photoobj = obj4.getJSONObject("revPhoto");
+                            JSONArray photoarr = photoobj.getJSONArray("data");
+                            Log.i("len", String.valueOf(photoarr.length()));
+                            try {
+                                byte[] bytes = new byte[photoarr.length()];
+                                for(int b=0;b<photoarr.length();b++){
+                                    bytes[b]=(byte)(((int)photoarr.get(b)) & 0xFF);
+                                }
+                                byte[] imagedec = Base64.decode(bytes,Base64.DEFAULT);
+                                Log.i("photo", String.valueOf(bytes));
+                                ImageView img = child.findViewById(R.id.reviewImage);
+                                Bitmap decodedPhoto = BitmapFactory.decodeByteArray(imagedec,0,imagedec.length);
+                                Log.i("photo", String.valueOf(decodedPhoto));
+                                try {
+                                    img.setImageBitmap(Bitmap.createScaledBitmap(decodedPhoto,700,700,false));
+                                }
+                                catch (NullPointerException e){
+                                    Log.i("photo", String.valueOf(e));
+                                }
+                            }
+                            catch (IllegalArgumentException e){
+                                Log.i("photo", String.valueOf(e));
+                            }
+                        }
                         Button button2 = child.findViewById(R.id.button_delete_review);
                         button2.setOnClickListener(v -> deletereview(revID));
                         if(admin != 1) {

@@ -43,18 +43,22 @@ public class Shout_screen extends AppCompatActivity {
     public String getrJson(){
         return Shout_screen.rJson;
     }
+    Timer getmore;
+    TimerTask getmoretask;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shoutbox);
-        new Timer().scheduleAtFixedRate(new TimerTask() {
+        getmore = new Timer();
+        getmoretask = new TimerTask() {
             @Override
             public void run() {
                 getJson(JSONSaved.getUrl()+"/shoutbox/data");
             }
-        }, 0, 5000);
+        };
+        getmore.scheduleAtFixedRate(getmoretask,0,5000);
 
         Button button = findViewById(R.id.shoutSend);
         button.setOnClickListener(v -> sendshout());
@@ -66,6 +70,13 @@ public class Shout_screen extends AppCompatActivity {
             button.setVisibility(View.INVISIBLE);
         }
 
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        getmore.cancel();
+        finish();
     }
 
     public void sendshout()
