@@ -59,15 +59,15 @@ public class Placeid_screen extends AppCompatActivity {
         Button button2 = findViewById(R.id.button_edit_place);
         button2.setOnClickListener(v -> edit_place());
 
-        if(JSONSaved.getUser() == 0) {
-            button2.setVisibility(View.INVISIBLE); }
         if(JSONSaved.getIsadmin() == 0) {
+            button2.setVisibility(View.INVISIBLE);
             button1.setVisibility(View.INVISIBLE); }
     }
     
 
     public void edit_place()
     {
+
         Intent intent = new Intent(this, Edit_place_screen.class);
         startActivity(intent);
     }
@@ -134,10 +134,22 @@ public class Placeid_screen extends AppCompatActivity {
                         Log.i("photo", String.valueOf(e));
                     }
                 }
-                if(obj3.has("name")) name.setText(obj3.getString("name"));
-                if(obj3.has("shortDescription")) shortDesc.setText(obj3.getString("shortDescription"));
-                if(obj3.has("longDescription")) longDesc.setText(obj3.getString("longDescription"));
-                if(obj3.has("location")) location.setText("Location: " + obj3.getString("location"));
+                if(obj3.has("name")) {
+                    name.setText(obj3.getString("name"));
+                    JSONSaved.setPlace_name(obj3.getString("name"));
+                }
+                if(obj3.has("shortDescription")) {
+                    shortDesc.setText(obj3.getString("shortDescription"));
+                    JSONSaved.setPlace_shortdesc(obj3.getString("shortDescription"));
+                }
+                if(obj3.has("longDescription")) {
+                    longDesc.setText(obj3.getString("longDescription"));
+                    JSONSaved.setPlace_longdesc(obj3.getString("longDescription"));
+                }
+                if(obj3.has("location")) {
+                    location.setText("Location: " + obj3.getString("location"));
+                    JSONSaved.setPlace_location(obj3.getString("location"));
+                }
                 ConstraintLayout load = findViewById(R.id.loadingPT);
                 Button review = findViewById(R.id.reviewButton);
                 Transition transition = new Fade(Fade.MODE_OUT);

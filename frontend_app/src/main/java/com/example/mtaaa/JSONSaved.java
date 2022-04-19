@@ -6,8 +6,44 @@ public class JSONSaved {
     private static int isadmin = 0;
     private static int placetype;
     private static int placeid;
+
+    private static String place_name;
+    private static String place_longdesc;
+    private static String place_shortdesc;
+    private static String place_location;
+
     private static String placetypeName;
-    private static String url = "https://b8c9-109-230-19-54.ngrok.io";
+    private static String url = "https://cd1a-95-102-14-246.eu.ngrok.io";
+
+
+    public static void setPlace_name(String name){
+        JSONSaved.place_name = name;
+    }
+    public static String getPlace_name(){
+        return JSONSaved.place_name;
+    }
+
+    public static void setPlace_longdesc(String  dsc){
+        JSONSaved.place_longdesc = dsc;
+    }
+    public static String getPlace_longdesc(){
+        return JSONSaved.place_longdesc;
+    }
+
+    public static void setPlace_shortdesc(String sdsc){
+        JSONSaved.place_shortdesc = sdsc;
+    }
+    public static String getPlace_shortdesc(){
+        return JSONSaved.place_shortdesc;
+    }
+
+    public static void setPlace_location(String lc){
+        JSONSaved.place_location = lc;
+    }
+    public static String getPlace_location(){
+        return JSONSaved.place_location;
+    }
+
 
     public static void setUser(int user){
         JSONSaved.user = user;

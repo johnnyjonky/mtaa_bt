@@ -3,7 +3,11 @@ package com.example.mtaaa;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,22 +27,35 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+
 
 public class Edit_place_screen extends AppCompatActivity {
 
     private static String rJson;
+    private static String uploadedImage;
+
+    private static final int RESULT_LOAD_IMAGE = 0;
+    private static final int REQUEST_LOAD_IMAGE = 0;
+
     public void setrJson(String str){ Edit_place_screen.rJson = str; }
     public String getrJson(){
         return Edit_place_screen.rJson;
     }
+    public static void setUploadedImage(String str) { Edit_place_screen.uploadedImage = str;}
+    public String getUploadedImage(){return Edit_place_screen.uploadedImage;}
 
     TextView txtt;
 
-    String name;
-    String ldesc;
-    String sdesc;
-    String loc;
+    String name = JSONSaved.getPlace_name();
+    String ldesc = JSONSaved.getPlace_longdesc();
+    String sdesc = JSONSaved.getPlace_shortdesc();
+    String loc = JSONSaved.getPlace_location();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +64,76 @@ public class Edit_place_screen extends AppCompatActivity {
         Button button = findViewById(R.id.submit_place);
         button.setOnClickListener(v -> submit());
 
+        EditText edt = (EditText) findViewById(R.id.placeTypeNameEdit);
+        edt.setText(JSONSaved.getPlace_name());
+
+        edt = findViewById(R.id.placeTypeSDestEdit);
+        edt.setText(JSONSaved.getPlace_shortdesc());
+
+        edt = findViewById(R.id.placeTypeLDestEdit);
+        edt.setText(JSONSaved.getPlace_longdesc());
+
+        edt = findViewById(R.id.placeTypeLocationEdit);
+        edt.setText(JSONSaved.getPlace_location());
 
         get(JSONSaved.getUrl()+"/places/data/"+JSONSaved.getPlaceid());
         //get placetypes
+
+
+        Button revph = findViewById(R.id.uploadPlacetypeImg);
+        revph.setOnClickListener(v -> {
+            Intent i = new Intent(
+                    Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+            startActivityForResult(i, RESULT_LOAD_IMAGE);
+
+        });
+
+
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Uri selectedImage = null;
+
+        if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK) {
+            Log.i("upload","NOK");
+            selectedImage = data.getData();
+            InputStream in;
+            try {
+                in = getContentResolver().openInputStream(selectedImage);
+                final Bitmap selected_img = BitmapFactory.decodeStream(in);
+                encodeTobase64(selected_img);
+                Button revph = findViewById(R.id.uploadPlacetypeImg);
+                revph.setText("Photo chosen");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "An error occured!", Toast.LENGTH_LONG).show();
+            }
+            //Bitmap imageBitmap = (Bitmap) extras.get("data");
+            Log.i("upload", String.valueOf(data));
+        }
+    }
+
+
+
+    public static String encodeTobase64(Bitmap image) {
+        Bitmap immagex=Bitmap.createScaledBitmap(image,200,200,true);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immagex.compress(Bitmap.CompressFormat.JPEG, 40, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b,Base64.DEFAULT);
+
+        Log.i("LOOK", String.valueOf(imageEncoded.length()));
+        setUploadedImage(imageEncoded);
+
+        return imageEncoded;
+    }
+
 
     public void get(String url)
     {
@@ -70,8 +153,9 @@ public class Edit_place_screen extends AppCompatActivity {
             if(obj.has("placetypes")){
                 JSONObject obj3 = (JSONObject) obj.get("placetypes");
 
-                EditText edt = findViewById(R.id.placeTypeNameEdit);
-                edt.setText(obj3.getString("name"));
+                EditText edt = (EditText) findViewById(R.id.placeTypeNameEdit);
+                edt.setText("dsadasdasd",TextView.BufferType.EDITABLE);
+
 
                 edt = findViewById(R.id.placeTypeSDestEdit);
                 edt.setText(obj3.getString("shortDescription"));
@@ -118,7 +202,7 @@ public class Edit_place_screen extends AppCompatActivity {
             jsonBody.put("shortDescription", shortdesc);
             jsonBody.put("longDescription", longdesc);
             jsonBody.put("placeType", JSONSaved.getPlacetype());
-            jsonBody.put("photo", "");
+            jsonBody.put("photo", getUploadedImage());
             jsonBody.put("location", location);
         } catch (JSONException e) {
             e.printStackTrace();
